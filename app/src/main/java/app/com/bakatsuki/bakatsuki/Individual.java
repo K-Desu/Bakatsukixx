@@ -59,6 +59,8 @@ public class Individual extends AppCompatActivity {
 
         app.getCommunityMessagesRef().push().setValue(messagePack);
 
+
+
     }
 
 }

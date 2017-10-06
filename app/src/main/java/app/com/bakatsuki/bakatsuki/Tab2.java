@@ -6,6 +6,10 @@ package app.com.bakatsuki.bakatsuki;
  */
 
 
+        import android.app.Dialog;
+        import android.graphics.Color;
+        import android.graphics.Typeface;
+        import android.graphics.drawable.ColorDrawable;
         import android.os.Bundle;
         import android.support.annotation.Nullable;
         import android.support.v4.content.ContextCompat;
@@ -16,10 +20,10 @@ package app.com.bakatsuki.bakatsuki;
         import android.support.v4.app.Fragment;
         import android.view.View;
         import android.view.ViewGroup;
-
-        import com.google.firebase.database.ChildEventListener;
-        import com.google.firebase.database.DataSnapshot;
-        import com.google.firebase.database.DatabaseError;
+        import android.view.Window;
+        import android.view.WindowManager;
+        import android.widget.Button;
+        import android.widget.TextView;
 
         import java.util.ArrayList;
 
@@ -32,11 +36,10 @@ public class Tab2 extends Fragment  {
 
     RecyclerView mRecyclerView;
     protected RecyclerView.Adapter mAdapter;
-    protected ArrayList<MessagePack> communityUserLists = new ArrayList<MessagePack>();
-    private RecyclerView.LayoutManager mLayoutManager;
+    protected ArrayList<CommunityChatModel> communityUserLists = new ArrayList<CommunityChatModel>();
+    private LinearLayoutManager mLayoutManager;
 
 
-    private App app;
 
 
 
@@ -46,9 +49,18 @@ public class Tab2 extends Fragment  {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-        app = App.getInstance();
-
         View rootView = inflater.inflate(R.layout.tab2,container,false);
+
+        CommunityChatModel communityChatModel = new CommunityChatModel();
+        CommunityChatModel communityChatModel2 = new CommunityChatModel();
+
+
+        communityChatModel.setLastMsg("أشكركم من كل قلب على كل شي سويتيوه .. <3");
+        communityChatModel2.setLastMsg("الله يوفقكم وييسر لكم");
+
+        communityUserLists.add(communityChatModel);
+
+
         setupRecyclerView(rootView);
 
 
@@ -66,6 +78,9 @@ public class Tab2 extends Fragment  {
 
 
 
+        // Add holders in reverese mode : new holders added on the top
+
+
 
         mAdapter = createAdapter();
         mRecyclerView.setAdapter(mAdapter);
@@ -74,21 +89,76 @@ public class Tab2 extends Fragment  {
 
 
         mLayoutManager = new LinearLayoutManager(getContext());
+
+
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
+
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
+
+    }
+
+
+//
+//
+    public  void showOnClickDialog() {
+
+        final Dialog dialog;
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.individual_message_dialog);
+        dialog.show();
+
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView individualMessage;
+        Button closeDialog ;
+
+        individualMessage = (TextView) dialog.findViewById(R.id.individual_message_textview);
+        closeDialog = (Button) dialog.findViewById(R.id.close_dialog);
+
+
+        final Typeface droidKufi = Typeface.createFromAsset(getResources().getAssets(), "droidKufi-regular.ttf");
+
+        individualMessage.setTypeface(droidKufi);
+        closeDialog.setTypeface(droidKufi);
+
+
+
+
+
+        closeDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = dialog.getWindow();
+        lp.copyFrom(window.getAttributes());
+        //This makes the dialog take up the full width
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
     }
 
 
 
-    private void addMessage(MessagePack messagePack)
-    {
-        addMessage(messagePack);
-        mAdapter.notifyDataSetChanged();
-    }
 
-    private CommonAdapter<MessagePack> createAdapter() {
-        return new CommonAdapter<MessagePack>(communityUserLists, R.layout.message_instance) {
+
+
+
+
+
+
+
+    private CommonAdapter<CommunityChatModel> createAdapter() {
+        return new CommonAdapter<CommunityChatModel>(communityUserLists, R.layout.message_instance) {
             @Override
             public ViewHolders OnCreateHolder(View v) {
 
@@ -96,7 +166,7 @@ public class Tab2 extends Fragment  {
             }
 
             @Override
-            public void OnBindHolder(final ViewHolders holder, final MessagePack model, int position) {
+            public void OnBindHolder(final ViewHolders holder, final CommunityChatModel model, int position) {
                 // - get element from your dataset at this position
                 // - replace the contents of the view with that element
                 ViewHolders.CommunityHolder communityHolder = (ViewHolders.CommunityHolder) holder;
@@ -106,7 +176,7 @@ public class Tab2 extends Fragment  {
                 holder.getView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        OnClickHolders(model, v);
+                        showOnClickDialog();
                     }
                 });
 
@@ -123,17 +193,19 @@ public class Tab2 extends Fragment  {
                 holder.getPicture().setBorderColor(ContextCompat.getColor(getContext(), R.color.lighter));
 
 
-                String chatTitle = "مجهول";
+                String chatTitle = model.getChatName();
 
                 if (chatTitle == null)
                     return;
 
 
-                communityHolder.setCommunitySubtitle(model.getMessage());
+                communityHolder.setCommunitySubtitle(model.getLastMsg());
 
 
 
             }
+
+
 
 
         };
@@ -141,43 +213,6 @@ public class Tab2 extends Fragment  {
 
 
 
-    private void receiveMessage()
-    {
-        app.getCommunityMessagesRef().addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                MessagePack messagePack = dataSnapshot.getValue(MessagePack.class);
-                messagePack.setId(dataSnapshot.getKey());
-
-                addMessage(messagePack);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                MessagePack messagePack = dataSnapshot.getValue(MessagePack.class);
-                messagePack.setId(dataSnapshot.getKey());
-
-                addMessage(messagePack);
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 }

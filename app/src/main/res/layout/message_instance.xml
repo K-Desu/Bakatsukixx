@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:orientation="vertical"
+    android:padding="1dp">
+
+    <!-- Thumbnail Image -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/chat_holder_linearlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+      >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:id="@+id/chatOpponent"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/user_default_photo"
+            app:border="true"
+            app:border_color="@color/lighter"
+            app:border_width="4dp"
+            app:shadow="false" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/chatOpponentFullname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_color"
+                        android:fontFamily="sans-serif-light"
+                        android:text="مجهول"
+                        android:textSize="16dp"
+                        android:layout_weight="1"
+                        android:layout_marginRight="8dp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="رسالة"
+                    android:id="@+id/chatLastMessage"
+                    android:textColor="@color/text_color"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="14dp"
+                    android:maxLines="1"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:layout_weight="1"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#bdbdbd"
+        android:id="@+id/chat_line_divider_lineaerlayout"
+        android:layout_below="@+id/chat_holder_linearlayout"
+        android:orientation="horizontal">
+    </LinearLayout>
+
+
+</RelativeLayout>

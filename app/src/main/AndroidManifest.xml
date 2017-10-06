@@ -36,6 +36,7 @@
             android:label="@string/title_activity_main_menu"
             android:theme="@style/AppTheme" />
         <activity android:name=".Individual" />
+        <activity android:name=".MainDR"></activity>
     </application>
 
 </manifest>

@@ -23,7 +23,7 @@
         android:background="@android:color/transparent"
        />
     <Space
-        android:layout_width="20dp"
+        android:layout_width="15dp"
         android:layout_height="55dp"
         />
 

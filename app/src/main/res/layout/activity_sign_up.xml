@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.com.bakatsuki.bakatsuki.SignUp">
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="تسجيل جديد"
+        android:textColor="@color/darker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:textSize="30sp"
+        android:id="@+id/sign_up_textview"/>
+
+
+    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="الفئة"
+        android:layout_below="@+id/sign_up_textview"
+        android:id="@+id/person_type_spinner"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="3dp"
+        android:gravity="center"
+        android:textColorHint="#bdbdbd"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/person_type_spinner"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/email_inputlayout"
+        android:layout_marginTop="20dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:ems="3"
+            android:textColor="#616161"
+            android:id="@+id/email_editext"
+            android:inputType="textEmailAddress"
+            android:maxLength="100"
+            android:textColorHint="#bdbdbd"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:hint="البريد الإلكتروني"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email_inputlayout"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/password_inputlayout"
+        android:layout_marginTop="20dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:ems="3"
+            android:textColorHint="#bdbdbd"
+            android:id="@+id/password_edittext"
+            android:inputType="textPassword"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:hint="الرمز السري"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password_inputlayout"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dr_code_inputlayout"
+        android:layout_marginTop="20dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:ems="3"
+            android:id="@+id/dr_code_edittext"
+            android:inputType="text"
+            android:textColorHint="#bdbdbd"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:hint="كود تفعيل العضوية"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/sign_in_button"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:layout_below="@id/dr_code_inputlayout"
+        android:layout_centerHorizontal="true"
+        android:text="تسجيل" />
+
+
+
+
+
+</RelativeLayout>

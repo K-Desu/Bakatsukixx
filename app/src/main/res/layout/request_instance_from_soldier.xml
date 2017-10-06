@@ -18,7 +18,7 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-      >
+        >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="55dp"
@@ -56,7 +56,7 @@
                         android:textStyle="bold"
                         android:textColor="@color/text_color"
                         android:fontFamily="sans-serif-light"
-                        android:text="مواطن مجهول"
+                        android:text="جندي مجهول"
                         android:textSize="16dp"
                         android:layout_weight="1"
                         android:layout_marginRight="8dp" />

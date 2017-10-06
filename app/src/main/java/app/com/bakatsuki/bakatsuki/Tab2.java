@@ -36,7 +36,7 @@ public class Tab2 extends Fragment  {
 
     RecyclerView mRecyclerView;
     protected RecyclerView.Adapter mAdapter;
-    protected ArrayList<CommunityChatModel> communityUserLists = new ArrayList<CommunityChatModel>();
+    protected ArrayList<MessagePack> communityUserLists = new ArrayList<MessagePack>();
     private LinearLayoutManager mLayoutManager;
 
 
@@ -51,14 +51,7 @@ public class Tab2 extends Fragment  {
 
         View rootView = inflater.inflate(R.layout.tab2,container,false);
 
-        CommunityChatModel communityChatModel = new CommunityChatModel();
-        CommunityChatModel communityChatModel2 = new CommunityChatModel();
 
-
-        communityChatModel.setLastMsg("أشكركم من كل قلب على كل شي سويتيوه .. <3");
-        communityChatModel2.setLastMsg("الله يوفقكم وييسر لكم");
-
-        communityUserLists.add(communityChatModel);
 
 
         setupRecyclerView(rootView);
@@ -157,8 +150,8 @@ public class Tab2 extends Fragment  {
 
 
 
-    private CommonAdapter<CommunityChatModel> createAdapter() {
-        return new CommonAdapter<CommunityChatModel>(communityUserLists, R.layout.message_instance) {
+    private CommonAdapter<MessagePack> createAdapter() {
+        return new CommonAdapter<MessagePack>(communityUserLists, R.layout.message_instance) {
             @Override
             public ViewHolders OnCreateHolder(View v) {
 
@@ -166,7 +159,7 @@ public class Tab2 extends Fragment  {
             }
 
             @Override
-            public void OnBindHolder(final ViewHolders holder, final CommunityChatModel model, int position) {
+            public void OnBindHolder(final ViewHolders holder, final MessagePack model, int position) {
                 // - get element from your dataset at this position
                 // - replace the contents of the view with that element
                 ViewHolders.CommunityHolder communityHolder = (ViewHolders.CommunityHolder) holder;
@@ -193,13 +186,13 @@ public class Tab2 extends Fragment  {
                 holder.getPicture().setBorderColor(ContextCompat.getColor(getContext(), R.color.lighter));
 
 
-                String chatTitle = model.getChatName();
+                String chatTitle = "مجهول";
 
                 if (chatTitle == null)
                     return;
 
 
-                communityHolder.setCommunitySubtitle(model.getLastMsg());
+                communityHolder.setCommunitySubtitle(model.getMessage());
 
 
 

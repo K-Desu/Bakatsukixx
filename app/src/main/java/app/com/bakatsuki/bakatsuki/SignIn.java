@@ -34,7 +34,7 @@ public class SignIn extends AppCompatActivity {
 
     EditText userEmail , userPassword;
     Button signInBtn ;
-    TextView signInTextView;
+    TextView signInTextView , toSignUpTextView ;
 
     private App app;
 
@@ -74,10 +74,22 @@ public class SignIn extends AppCompatActivity {
         userPassword = (EditText) findViewById(R.id.password_edittext_login);
         signInBtn = (Button) findViewById(R.id.sign_in_button);
 
+        toSignUpTextView = (TextView) findViewById(R.id.to_sign_up_textview);
+        toSignUpTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),SignUp.class);
+                startActivity(intent);
+            }
+        });
+
         userEmail.setTypeface(droidKufi);
         userPassword.setTypeface(droidKufi);
         signInBtn.setTypeface(droidKufi);
         signInTextView.setTypeface(droidKufi);
+
+
+
 
 
 

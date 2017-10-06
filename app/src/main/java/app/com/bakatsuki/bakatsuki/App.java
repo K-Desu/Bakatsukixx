@@ -14,6 +14,7 @@ public class App extends Application {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference usersRef;
+    private DatabaseReference communityMessagesRef;
     private FirebaseAuth mAuth;  // firebase auth
 
 
@@ -31,6 +32,7 @@ public class App extends Application {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         usersRef = firebaseDatabase.getReference().child("users");
+        communityMessagesRef = firebaseDatabase.getReference().child("CommunityMessage");
 
     }
 
@@ -45,6 +47,10 @@ public class App extends Application {
 
     public FirebaseDatabase getFirebaseDatabase() {
         return firebaseDatabase;
+    }
+
+    public DatabaseReference getCommunityMessagesRef() {
+        return communityMessagesRef;
     }
 
     public FirebaseAuth getmAuth() {

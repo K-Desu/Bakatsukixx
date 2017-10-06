@@ -10,6 +10,9 @@ public class UserInformation {
     private String uid,email;
     private ACCTYPE accountType;
 
+    public UserInformation() {
+    }
+
     public UserInformation(String uid, String email, ACCTYPE accountType) {
         this.uid = uid;
         this.email = email;

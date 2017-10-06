@@ -18,6 +18,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -125,13 +128,43 @@ public class SignIn extends AppCompatActivity {
 
     private void signIn(final String email, String password)
     {
+
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+
+
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
-                    Intent intent = new Intent(getApplicationContext(),MainMenu.class);
-                    startActivity(intent);
+                    FirebaseUser user = auth.getCurrentUser();
+                    String uid = user.getUid();
+
+                    app.getUsersRef().child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            UserInformation userInformation = dataSnapshot.getValue(UserInformation.class);
+
+
+                            Log.i("---->",userInformation.getAccountType().toString());
+                            if(userInformation.getAccountType() == UserInformation.ACCTYPE.CES) {
+
+                                Intent intent = new Intent(getApplicationContext(),Individual.class);
+                                startActivity(intent);
+                            } else if( userInformation.getAccountType() == UserInformation.ACCTYPE.Solider)
+                            {
+                                Intent intent = new Intent(getApplicationContext(),MainMenu.class);
+                                startActivity(intent);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 } else {
                     // results if it's failed
@@ -141,6 +174,7 @@ public class SignIn extends AppCompatActivity {
         });
 
     }
+
 
 
 }

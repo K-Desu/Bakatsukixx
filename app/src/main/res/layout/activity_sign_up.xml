@@ -17,7 +17,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:textSize="30sp"
-        android:id="@+id/sign_up_textview"/>
+        android:id="@+id/sign_up_textview" />
 
 
     <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner

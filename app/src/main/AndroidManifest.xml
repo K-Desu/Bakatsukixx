@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.com.bakatsuki.bakatsuki">
 
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_CORSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -13,6 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 
     <application
         android:name=".App"
@@ -30,11 +32,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUp" />
+        <activity android:name=".SignIn" />
+
         <activity
             android:name=".MainMenu"
             android:label="@string/title_activity_main_menu"
             android:theme="@style/AppTheme" />
         <activity android:name=".Individual"></activity>
+            android:theme="@style/AppTheme"></activity>
+
     </application>
 
 </manifest>

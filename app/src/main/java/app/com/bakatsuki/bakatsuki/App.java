@@ -3,6 +3,7 @@ package app.com.bakatsuki.bakatsuki;
 import android.app.Application;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -13,6 +14,7 @@ public class App extends Application {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference usersRef;
+    private FirebaseAuth mAuth;  // firebase auth
 
 
 
@@ -20,11 +22,13 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         instance = this;
+
 
         FirebaseApp.initializeApp(this);
 
+
+        mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         usersRef = firebaseDatabase.getReference().child("users");
 
@@ -39,5 +43,11 @@ public class App extends Application {
         return instance;
     }
 
+    public FirebaseDatabase getFirebaseDatabase() {
+        return firebaseDatabase;
+    }
 
+    public FirebaseAuth getmAuth() {
+        return mAuth;
+    }
 }

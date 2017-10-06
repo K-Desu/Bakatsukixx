@@ -38,5 +38,7 @@ public class Individual extends AppCompatActivity {
 
 
 
+
+
     }
 }

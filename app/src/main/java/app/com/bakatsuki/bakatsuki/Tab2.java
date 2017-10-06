@@ -6,6 +6,10 @@ package app.com.bakatsuki.bakatsuki;
  */
 
 
+        import android.app.Dialog;
+        import android.graphics.Color;
+        import android.graphics.Typeface;
+        import android.graphics.drawable.ColorDrawable;
         import android.os.Bundle;
         import android.support.annotation.Nullable;
         import android.support.v4.content.ContextCompat;
@@ -16,6 +20,10 @@ package app.com.bakatsuki.bakatsuki;
         import android.support.v4.app.Fragment;
         import android.view.View;
         import android.view.ViewGroup;
+        import android.view.Window;
+        import android.view.WindowManager;
+        import android.widget.Button;
+        import android.widget.TextView;
 
         import java.util.ArrayList;
 
@@ -85,6 +93,61 @@ public class Tab2 extends Fragment  {
     }
 
 
+//
+//
+    public  void showOnClickDialog() {
+
+        final Dialog dialog;
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.individual_message_dialog);
+        dialog.show();
+
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView individualMessage;
+        Button closeDialog ;
+
+        individualMessage = (TextView) dialog.findViewById(R.id.individual_message_textview);
+        closeDialog = (Button) dialog.findViewById(R.id.close_dialog);
+
+
+        final Typeface droidKufi = Typeface.createFromAsset(getResources().getAssets(), "droidKufi-regular.ttf");
+
+        individualMessage.setTypeface(droidKufi);
+        closeDialog.setTypeface(droidKufi);
+
+
+
+
+
+        closeDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = dialog.getWindow();
+        lp.copyFrom(window.getAttributes());
+        //This makes the dialog take up the full width
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
     private CommonAdapter<CommunityChatModel> createAdapter() {
         return new CommonAdapter<CommunityChatModel>(communityUserLists, R.layout.message_instance) {
             @Override
@@ -104,7 +167,7 @@ public class Tab2 extends Fragment  {
                 holder.getView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        OnClickHolders(model, v);
+                        showOnClickDialog();
                     }
                 });
 

@@ -145,8 +145,8 @@ public class SignIn extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             UserInformation userInformation = dataSnapshot.getValue(UserInformation.class);
 
+                             app.setUserInformation(userInformation);
 
-                            Log.i("---->",userInformation.getAccountType().toString());
                             if(userInformation.getAccountType() == UserInformation.ACCTYPE.CES) {
 
                                 Intent intent = new Intent(getApplicationContext(),Individual.class);

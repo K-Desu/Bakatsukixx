@@ -6,32 +6,35 @@ package app.com.bakatsuki.bakatsuki;
  */
 
 
-        import android.app.Dialog;
-        import android.graphics.Color;
-        import android.graphics.Typeface;
-        import android.graphics.drawable.ColorDrawable;
-        import android.os.Bundle;
-        import android.support.annotation.Nullable;
-        import android.support.v4.content.ContextCompat;
-        import android.support.v7.widget.LinearLayoutManager;
-        import android.support.v7.widget.RecyclerView;
-        import android.view.LayoutInflater;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 
-        import android.support.v4.app.Fragment;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.view.Window;
-        import android.view.WindowManager;
-        import android.widget.Button;
-        import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 
-        import java.util.ArrayList;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
-        import app.com.bakatsuki.bakatsuki.R;
+import java.util.ArrayList;
+
+import app.com.bakatsuki.bakatsuki.R;
 
 
-
-public class Tab2 extends Fragment  {
+public class Tab2 extends Fragment {
 
 
     RecyclerView mRecyclerView;
@@ -40,27 +43,53 @@ public class Tab2 extends Fragment  {
     private LinearLayoutManager mLayoutManager;
 
 
-
-
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-        View rootView = inflater.inflate(R.layout.tab2,container,false);
-
-
-
+        View rootView = inflater.inflate(R.layout.tab2, container, false);
 
         setupRecyclerView(rootView);
 
 
+        App.getInstance().getCommunityMessagesRef().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                MessagePack messagePack = dataSnapshot.getValue(MessagePack.class);
+                messagePack.setId(dataSnapshot.getKey());
+                addMessage(messagePack);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                MessagePack messagePack = dataSnapshot.getValue(MessagePack.class);
+                messagePack.setId(dataSnapshot.getKey());
+                addMessage(messagePack);
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         return rootView;
 
     }
-
 
     private void setupRecyclerView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.messages_recyclerview);
@@ -70,15 +99,11 @@ public class Tab2 extends Fragment  {
         mRecyclerView.setHasFixedSize(true);
 
 
-
         // Add holders in reverese mode : new holders added on the top
-
 
 
         mAdapter = createAdapter();
         mRecyclerView.setAdapter(mAdapter);
-
-
 
 
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -91,13 +116,15 @@ public class Tab2 extends Fragment  {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
     }
 
 
-//
-//
-    public  void showOnClickDialog() {
+    private void addMessage(MessagePack messagePack) {
+        addMessage(messagePack);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void showOnClickDialog(String message) {
 
         final Dialog dialog;
         dialog = new Dialog(getContext());
@@ -108,19 +135,17 @@ public class Tab2 extends Fragment  {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         TextView individualMessage;
-        Button closeDialog ;
+        Button closeDialog;
 
         individualMessage = (TextView) dialog.findViewById(R.id.individual_message_textview);
         closeDialog = (Button) dialog.findViewById(R.id.close_dialog);
 
+        individualMessage.setText(message);
 
         final Typeface droidKufi = Typeface.createFromAsset(getResources().getAssets(), "droidKufi-regular.ttf");
 
         individualMessage.setTypeface(droidKufi);
         closeDialog.setTypeface(droidKufi);
-
-
-
 
 
         closeDialog.setOnClickListener(new View.OnClickListener() {
@@ -140,16 +165,6 @@ public class Tab2 extends Fragment  {
 
     }
 
-
-
-
-
-
-
-
-
-
-
     private CommonAdapter<MessagePack> createAdapter() {
         return new CommonAdapter<MessagePack>(communityUserLists, R.layout.message_instance) {
             @Override
@@ -165,11 +180,10 @@ public class Tab2 extends Fragment  {
                 ViewHolders.CommunityHolder communityHolder = (ViewHolders.CommunityHolder) holder;
 
 
-
                 holder.getView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showOnClickDialog();
+                        showOnClickDialog(model.getMessage());
                     }
                 });
 
@@ -194,18 +208,11 @@ public class Tab2 extends Fragment  {
 
                 communityHolder.setCommunitySubtitle(model.getMessage());
 
-
-
             }
-
-
 
 
         };
     }
-
-
-
 
 
 }

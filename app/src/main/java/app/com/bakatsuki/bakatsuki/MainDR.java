@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
 import java.util.ArrayList;
 
 public class MainDR extends AppCompatActivity {
@@ -26,6 +30,7 @@ public class MainDR extends AppCompatActivity {
     protected ArrayList<MessagePack> communityUserLists = new ArrayList<MessagePack>();
     private LinearLayoutManager mLayoutManager;
 
+    private App app;
 
 
 
@@ -35,13 +40,16 @@ public class MainDR extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dr);
 
+        app = App.getInstance();
 
+        excuteWork();
         // init
         title = (TextView) findViewById(R.id.requests_title_textview);
         rootView = (RelativeLayout) findViewById(R.id.requests_relativelayout);
 
 
         setupRecyclerView(rootView);
+
 
 
     }
@@ -128,9 +136,39 @@ public class MainDR extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+    }
 
 
+    private void excuteWork()
+    {
+        app.getDocOnlineRef().child(app.getUserInformation().getUid()).child("chatsRef").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                String roomKey= dataSnapshot.getKey();
 
 
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

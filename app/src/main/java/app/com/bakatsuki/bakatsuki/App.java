@@ -15,11 +15,11 @@ public class App extends Application {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference usersRef;
     private DatabaseReference communityMessagesRef;
+    private DatabaseReference docOnlineRef;
+    private DatabaseReference ChatsRef;
     private FirebaseAuth mAuth;  // firebase auth
 
-
-
-
+    private UserInformation userInformation;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -33,6 +33,8 @@ public class App extends Application {
         firebaseDatabase = FirebaseDatabase.getInstance();
         usersRef = firebaseDatabase.getReference().child("users");
         communityMessagesRef = firebaseDatabase.getReference().child("CommunityMessage");
+        docOnlineRef = firebaseDatabase.getReference().child("DocOnline");
+        ChatsRef = firebaseDatabase.getReference().child("Chats");
 
     }
 
@@ -53,7 +55,24 @@ public class App extends Application {
         return communityMessagesRef;
     }
 
+    public DatabaseReference getDocOnlineRef() {
+        return docOnlineRef;
+    }
+
     public FirebaseAuth getmAuth() {
         return mAuth;
     }
+
+    public UserInformation getUserInformation() {
+        return userInformation;
+    }
+
+    public void setUserInformation(UserInformation userInformation) {
+        this.userInformation = userInformation;
+    }
+
+    public DatabaseReference getChatsRef() {
+        return ChatsRef;
+    }
 }
+

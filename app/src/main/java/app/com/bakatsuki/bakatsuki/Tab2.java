@@ -37,7 +37,7 @@ public class Tab2 extends Fragment  {
     RecyclerView mRecyclerView;
     protected RecyclerView.Adapter mAdapter;
     protected ArrayList<CommunityChatModel> communityUserLists = new ArrayList<CommunityChatModel>();
-    private RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
 
 
 
@@ -78,6 +78,9 @@ public class Tab2 extends Fragment  {
 
 
 
+        // Add holders in reverese mode : new holders added on the top
+
+
 
         mAdapter = createAdapter();
         mRecyclerView.setAdapter(mAdapter);
@@ -86,6 +89,12 @@ public class Tab2 extends Fragment  {
 
 
         mLayoutManager = new LinearLayoutManager(getContext());
+
+
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
+
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 

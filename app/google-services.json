@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "285514147819",
+    "firebase_url": "https://bakastuki.firebaseio.com",
+    "project_id": "bakastuki",
+    "storage_bucket": "bakastuki.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285514147819:android:e5740eb5d6784ea3",
+        "android_client_info": {
+          "package_name": "app.com.bakatsuki.bakatsuki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285514147819-jod5kbirhrmd5g8dn6hmug7067du4gg4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzxiKdJL5NJhwNeQPsHoJXM7dsaEXnqwY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

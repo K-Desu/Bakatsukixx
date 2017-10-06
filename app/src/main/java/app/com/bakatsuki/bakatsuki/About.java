@@ -15,6 +15,7 @@ public class About extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+
         toSignUpBtn = (Button) findViewById(R.id.to_sign_up_button);
         toSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override

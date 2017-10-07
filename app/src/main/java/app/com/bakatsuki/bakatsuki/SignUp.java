@@ -152,8 +152,12 @@ public class SignUp extends AppCompatActivity {
 
                 if(getAccountType(type) == UserInformation.ACCTYPE.Solider)
                 {
-                    if(code == null || code.isEmpty())
+                    if(code == null || code.isEmpty()) {
+                        Toast.makeText(getApplicationContext(),"الرجاء إدخال كود العضوية",Toast.LENGTH_SHORT).show();
+                        loadingDialog(false);
                         return;
+                    }
+
 
                     app.getCodesRef().child("soliderCodes/"+code).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -185,8 +189,12 @@ public class SignUp extends AppCompatActivity {
                     });
                 } else if (getAccountType(type) == UserInformation.ACCTYPE.DOC)
                 {
-                    if(code == null || code.isEmpty())
+                    if(code == null || code.isEmpty()) {
+                        Toast.makeText(getApplicationContext(),"الرجاء إدخال كود العضوية",Toast.LENGTH_SHORT).show();
+                        loadingDialog(false);
                         return;
+                    }
+
 
                     app.getCodesRef().child("DoctorsCodes/"+code).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

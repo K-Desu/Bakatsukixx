@@ -2,6 +2,7 @@
 
 package app.com.bakatsuki.bakatsuki;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -22,13 +23,10 @@ import com.google.firebase.database.ServerValue;
 import app.com.bakatsuki.bakatsuki.R;
 
 
-/**
- * Created by khaledAlhindi on 10/6/2017 AD.
- */
-
 public class Tab1 extends Fragment {
 
     private App app;
+    Button startConverstion;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -38,62 +36,74 @@ public class Tab1 extends Fragment {
 
         View rootView = inflater.inflate(R.layout.tab1,container,false);
 
-        Button startConverstion = (Button) rootView.findViewById(R.id.talk_to_dr_btn);
+         startConverstion = (Button) rootView.findViewById(R.id.talk_to_dr_btn);
 
         startConverstion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.getDocOnlineRef().addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                        if(dataSnapshot !=null)
-                        {
-                            String key = app.getChatsRef().push().getKey();
-
-                            // path --> /Chat/_private/[KEY]
-                            DatabaseReference chatRoom = app.getChatsRef().child(key);
-
-                            DatabaseReference messagesRef = chatRoom.child("Messges");
-
-                            MessagePack chatMessage = new MessagePack();
-                            chatMessage.setId(key);
-                            chatMessage.setMessage("hello");
-                            chatMessage.setUsername("Null");
-                            chatMessage.setTimestamp(ServerValue.TIMESTAMP);
-                            chatMessage.setCounter(0);
-
-                            messagesRef.child("_last_message_").setValue(chatMessage);
-                            dataSnapshot.getRef().child("chatsRef").child(key).setValue(key);
-                        }
-
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                startConverstion();
+                startConverstion.setVisibility(View.INVISIBLE);
             }
         });
 
         return rootView;
 
+    }
+
+
+    private void startConverstion()
+    {
+        app.getDocOnlineRef().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if(dataSnapshot !=null)
+                {
+                    String key = app.getUserInformation().getUid();
+
+                    // path --> /Chat/_private/[KEY]
+                    DatabaseReference chatRoom = app.getChatsRef().child(key);
+
+                    DatabaseReference messagesRef = chatRoom.child("Messages");
+
+                    MessagePack chatMessage = new MessagePack();
+                    chatMessage.setId(key);
+                    chatMessage.setMessage("اهلا يا دكتور");
+                    chatMessage.setUsername("Null");
+                    chatMessage.setTimestamp(ServerValue.TIMESTAMP);
+                    chatMessage.setCounter(0);
+
+                    messagesRef.child("packs").setValue(chatMessage);
+                    messagesRef.child("lastMessage").setValue(chatMessage);
+                    dataSnapshot.getRef().child("chatsRef").child(key).setValue(key);
+
+                    Intent intent = new Intent(getContext(),Chat.class);
+                    intent.putExtra("chatKey",key);
+                    startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }

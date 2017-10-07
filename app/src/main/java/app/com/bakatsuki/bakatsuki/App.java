@@ -74,5 +74,7 @@ public class App extends Application {
     public DatabaseReference getChatsRef() {
         return ChatsRef;
     }
+
+
 }
 

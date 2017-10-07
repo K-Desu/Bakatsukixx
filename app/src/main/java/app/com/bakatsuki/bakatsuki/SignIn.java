@@ -163,6 +163,10 @@ public class SignIn extends AppCompatActivity {
                             {
                                 Intent intent = new Intent(getApplicationContext(),MainMenu.class);
                                 startActivity(intent);
+                            } else if (userInformation.getAccountType() == UserInformation.ACCTYPE.DOC)
+                            {
+                                Intent intent = new Intent(getApplicationContext(),MainDR.class);
+                                startActivity(intent);
                             }
 
 

@@ -120,7 +120,7 @@ public class Tab2 extends Fragment {
 
 
     private void addMessage(MessagePack messagePack) {
-        addMessage(messagePack);
+        communityUserLists.add(messagePack);
         mAdapter.notifyDataSetChanged();
     }
 

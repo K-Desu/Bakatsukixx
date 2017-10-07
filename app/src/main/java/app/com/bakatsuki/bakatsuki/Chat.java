@@ -23,13 +23,19 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public abstract class Chat extends AppCompatActivity {
+public  class Chat extends AppCompatActivity {
 
     protected enum TYPE {
         PUBLIC,PRIVATE
@@ -38,33 +44,36 @@ public abstract class Chat extends AppCompatActivity {
     /***************************************/
 
     // App
-     protected App app;
+    private App app;
 
     // layout contents
-    protected EditText messageET;
+    private EditText messageET;
 
 
-    protected ImageView  closeChatImageView;
-    protected ImageButton sendBtn;
+    private ImageButton sendBtn;
 
-    protected View rootView;
-    protected ListView messagesContainer;
+    private View rootView;
+    private ListView messagesContainer;
 
 
     // adapter impalement
-    protected ChatAdapter adapter;
-    protected ArrayList<MessagePack> chatHistory = new ArrayList<MessagePack>();
-    protected HashMap<String,MessagePack> chatMessages = new HashMap<String,MessagePack>();
+    private ChatAdapter adapter;
+    private ArrayList<MessagePack> chatHistory = new ArrayList<MessagePack>();
+    private HashMap<String,MessagePack> chatMessages = new HashMap<String,MessagePack>();
 
 
-    protected TYPE chatType;
+    private TYPE chatType;
 
 //    protected HashMap<String,PlayerModel> playerOnChat = new HashMap<>();
 
-    protected String chatRoomKey,roomName = null, roomPictureUrl = null, chatRoomType = null;
-    protected String opponentId;
+    private String chatRoomKey;
 
 
+    private DatabaseReference refRoom;
+    private DatabaseReference refMessages;
+
+
+    private ChildEventListener messagesPacketsListener;
 
 
 //    // Game providers recyclerview components
@@ -86,29 +95,8 @@ public abstract class Chat extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-
-
-
-
         app = App.getInstance();
-
-        //load message
-        Intent i = getIntent();
-        chatRoomKey = i.getStringExtra("room_key");
-        chatRoomType = i.getStringExtra("room_type");
-        roomName = i.getStringExtra("room_name");
-        roomPictureUrl = i.getStringExtra("room_picture");
-        opponentId = i.getStringExtra("friend_key");
-
-
-//        chatType = (chatRoomType.equals(FirebasePaths.FIREBASE_PRIVATE_ATTR)) ? TYPE.PRIVATE: TYPE.PUBLIC;
-
-
         initControls();
-
-
-
-
 
         // set up chat app mechanisms
         setupChat();
@@ -171,12 +159,12 @@ public abstract class Chat extends AppCompatActivity {
 
 
         // close chat :
-        closeChatImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        closeChatImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
 
 
         // set up game providers recyclerview
@@ -202,6 +190,22 @@ public abstract class Chat extends AppCompatActivity {
         scroll();
 
     }
+
+    void addMessage(DataSnapshot dataSnapshot)
+    {
+        if (isEmpty(dataSnapshot))
+            return;
+
+        MessagePack message =dataSnapshot.getValue(MessagePack.class);
+
+        String senderId = message.getUsername();
+        boolean isYou = senderId.equals(app.getUserInformation().getUid());
+
+        message.setMe(isYou);
+        addMessage(message);
+
+    }
+
 
     // this method for send message , execute only when a user click on send button
     protected boolean sendMessage(String message) {
@@ -234,7 +238,7 @@ public abstract class Chat extends AppCompatActivity {
 
 
 
-    public void leaveMessage(String username,String message)
+    private void leaveMessage(String username,String message)
     {
         MessagePack chatMessage = new MessagePack();
         chatMessage.setId("");
@@ -249,9 +253,78 @@ public abstract class Chat extends AppCompatActivity {
     }
 
     // this abstract method is for implements the chat mechinsim
-    protected abstract void setupChat();
-    protected abstract void sendMessageToFirebase(String message);
-    protected abstract void viewPorfileProccess();
-    protected abstract void viewLobbyProccess();
+    private  void setupChat(){
+        Intent i = getIntent();
+        chatRoomKey = i.getStringExtra("chatKey");
+        refRoom = app.getChatsRef().child(chatRoomKey);
+        refMessages = refRoom.child("Messages");
+        loadMessages();
+
+    }
+
+    private  void sendMessageToFirebase(String message){
+
+        if (sendMessage(message)) {
+            String messageKey = refMessages.push().getKey();
+
+            MessagePack chatMessage = new MessagePack();
+            chatMessage.setId(messageKey);
+            chatMessage.setMessage(message);
+            chatMessage.setUsername(app.getUserInformation().getUid());
+            chatMessage.setTimestamp(ServerValue.TIMESTAMP);
+
+            DatabaseReference messageRef = refMessages.child("packs").child(messageKey);
+            messageRef.setValue(chatMessage);
+            DatabaseReference lastMessageRef = refMessages.child("lastMessage");
+            lastMessageRef.setValue(chatMessage);
+        }
+    }
+
+    private void loadMessages()
+    {
+        messagesPacketsListener = refMessages.child("packs").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                addMessage(dataSnapshot);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                addMessage(dataSnapshot);
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
+    private boolean isEmpty(DataSnapshot dataSnapshot) {
+        return  dataSnapshot.child("message").getValue() == null;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        refMessages.child("packs").removeEventListener(messagesPacketsListener);
+
+    }
+
 
 }

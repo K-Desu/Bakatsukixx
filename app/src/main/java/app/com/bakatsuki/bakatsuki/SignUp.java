@@ -26,6 +26,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.w3c.dom.Text;
@@ -43,7 +47,7 @@ public class SignUp extends AppCompatActivity {
     Button signUpBtn ;
     TextView signUpTextView;
     ProgressDialog loadingDialog ;
-
+    private FirebaseAuth auth;
 
     TextInputLayout emailInputLayout , passwordInputLayout , specialCodeInputLayout ;
 
@@ -59,7 +63,7 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         app = App.getInstance();
-
+        auth =  FirebaseAuth.getInstance();
         // Init
 
         final Typeface droidKufi = Typeface.createFromAsset(getResources().getAssets(), "droidKufi-regular.ttf");
@@ -140,11 +144,80 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View v) {
 
                 loadingDialog(true);
-                String email = userEmail.getText().toString().trim();
-                String password= userPassword.getText().toString().trim();
-                String type = personType.getText().toString().trim();
+                final String email = userEmail.getText().toString().trim();
+                final String password= userPassword.getText().toString().trim();
+                final String type = personType.getText().toString().trim();
+                String code = userDrCode.getText().toString().trim();
 
-                signup(email,password,type);
+
+                if(getAccountType(type) == UserInformation.ACCTYPE.Solider)
+                {
+                    app.getCodesRef().child("soliderCodes/"+code).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getValue() !=null)
+                            {
+                                final DataSnapshot verValue =  dataSnapshot.child("verified");
+                                boolean verified = verValue.getValue(boolean.class);
+                                if(verified == false)
+                                {
+                                    loadingDialog(false);
+                                    signup(email,password,type,verValue.getRef());
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(),"كود التفعيل مستخدم",Toast.LENGTH_SHORT).show();
+                                    loadingDialog(false);
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(),"خطأ في الكود",Toast.LENGTH_SHORT).show();
+                                loadingDialog(false);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                } else if (getAccountType(type) == UserInformation.ACCTYPE.DOC)
+                {
+                    app.getCodesRef().child("DoctorsCodes/"+code).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getValue() !=null)
+                            {
+                                final DataSnapshot verValue =  dataSnapshot.child("verified");
+                                boolean verified = verValue.getValue(boolean.class);
+                                if(verified == false)
+                                {
+                                    loadingDialog(false);
+                                    signup(email,password,type,verValue.getRef());
+
+                                } else {
+                                    Toast.makeText(getApplicationContext(),"كود التفعيل مستخدم",Toast.LENGTH_SHORT).show();
+                                    loadingDialog(false);
+                                }
+
+                            } else {
+                                Toast.makeText(getApplicationContext(),"خطأ في الكود",Toast.LENGTH_SHORT).show();
+                                loadingDialog(false);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                } else
+                {
+                    signup(email,password,type,null);
+                }
+
+
+
 
 
             }
@@ -155,10 +228,9 @@ public class SignUp extends AppCompatActivity {
 
 
 
-    private void signup(final String email, String password, final String type)
+    private void signup(final String email, String password, final String type, final DatabaseReference code)
     {
 
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this
                 , new OnCompleteListener<AuthResult>() {
@@ -173,6 +245,10 @@ public class SignUp extends AppCompatActivity {
                             UserInformation userInformation = new UserInformation(uid,email,getAccountType(type));
                             app.getUsersRef().child(uid).setValue(userInformation);
 
+                            if(code !=null)
+                            {
+                                code.getRef().setValue(true);
+                            }
                             Toast.makeText(getApplicationContext(), "تم التسجيل بنجاح", Toast.LENGTH_LONG).show();
                             loadingDialog(false);
                             Intent intent = new Intent(getApplicationContext(),SignIn.class);

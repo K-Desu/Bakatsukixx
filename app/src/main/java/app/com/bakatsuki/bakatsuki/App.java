@@ -17,7 +17,9 @@ public class App extends Application {
     private DatabaseReference communityMessagesRef;
     private DatabaseReference docOnlineRef;
     private DatabaseReference ChatsRef;
+    private DatabaseReference codesRef;
     private FirebaseAuth mAuth;  // firebase auth
+
 
     private UserInformation userInformation;
     @Override
@@ -35,6 +37,7 @@ public class App extends Application {
         communityMessagesRef = firebaseDatabase.getReference().child("CommunityMessage");
         docOnlineRef = firebaseDatabase.getReference().child("DocOnline");
         ChatsRef = firebaseDatabase.getReference().child("Chats");
+        codesRef = firebaseDatabase.getReference().child("Code");
 
     }
 
@@ -69,6 +72,10 @@ public class App extends Application {
 
     public void setUserInformation(UserInformation userInformation) {
         this.userInformation = userInformation;
+    }
+
+    public DatabaseReference getCodesRef() {
+        return codesRef;
     }
 
     public DatabaseReference getChatsRef() {

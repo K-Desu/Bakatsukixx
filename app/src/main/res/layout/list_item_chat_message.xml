@@ -15,16 +15,20 @@
             android:id="@+id/contentWithBackground"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/in_message_bg_static"
-            android:orientation="vertical">
+            android:background="@drawable/in_msg_bg_static"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:gravity="right"
+            android:layout_gravity="right"
+            android:padding="10dp">
 
 
             <TextView
                 android:id="@+id/txtMessage"
                 android:text=""
                 android:textSize="17sp"
-                android:drawablePadding="5dp"
-                android:padding="2dp"
+                android:gravity="right"
+                android:layout_gravity="right"
                 android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

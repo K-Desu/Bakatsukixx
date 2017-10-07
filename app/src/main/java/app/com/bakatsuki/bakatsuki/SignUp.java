@@ -152,6 +152,9 @@ public class SignUp extends AppCompatActivity {
 
                 if(getAccountType(type) == UserInformation.ACCTYPE.Solider)
                 {
+                    if(code == null || code.isEmpty())
+                        return;
+
                     app.getCodesRef().child("soliderCodes/"+code).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -182,6 +185,9 @@ public class SignUp extends AppCompatActivity {
                     });
                 } else if (getAccountType(type) == UserInformation.ACCTYPE.DOC)
                 {
+                    if(code == null || code.isEmpty())
+                        return;
+
                     app.getCodesRef().child("DoctorsCodes/"+code).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {

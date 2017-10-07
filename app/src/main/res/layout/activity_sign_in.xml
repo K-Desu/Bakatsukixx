@@ -56,17 +56,6 @@
 
 
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/password_signin_inputlayout"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/dr_code_inputlayout"
-        android:layout_marginTop="20dp">
-
-
-    </android.support.design.widget.TextInputLayout>
-
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/sign_in_button"
@@ -75,25 +64,44 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
-        android:layout_below="@id/dr_code_inputlayout"
+        android:layout_below="@id/password_signin_inputlayout"
         android:layout_centerHorizontal="true"
         android:text="دخول" />
 
 
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_below="@+id/sign_in_button"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="20dp">
 
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="لا تملك حساب ؟"
+        android:text="سجل من هنا !"
         android:id="@+id/to_sign_up_textview"
-        android:layout_below="@id/sign_in_button"
+        android:layout_marginRight="7dp"
+        android:textSize="16sp"
+        android:textColor="@color/darker"
+   />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="لا تملك حساب ؟"
+        android:textSize="16sp"
+        android:id="@+id/dont_have_account_textview"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
+        />
 
 
-
+</LinearLayout>
 
 
 

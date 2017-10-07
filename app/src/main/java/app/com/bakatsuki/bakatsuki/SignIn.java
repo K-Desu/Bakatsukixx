@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -36,8 +37,9 @@ public class SignIn extends AppCompatActivity {
 
 
     EditText userEmail , userPassword;
+    TextInputLayout emailInputLayout , passwordInputLayout;
     Button signInBtn ;
-    TextView signInTextView , toSignUpTextView ;
+    TextView signInTextView , toSignUpTextView , dontHaveAccountTextView ;
 
     private App app;
 
@@ -77,6 +79,11 @@ public class SignIn extends AppCompatActivity {
         userPassword = (EditText) findViewById(R.id.password_edittext_login);
         signInBtn = (Button) findViewById(R.id.sign_in_button);
 
+        emailInputLayout = (TextInputLayout) findViewById(R.id.email_signin_inputlayout);
+        emailInputLayout.setTypeface(droidKufi);
+        passwordInputLayout = (TextInputLayout) findViewById(R.id.password_signin_inputlayout);
+        passwordInputLayout.setTypeface(droidKufi);
+
         toSignUpTextView = (TextView) findViewById(R.id.to_sign_up_textview);
         toSignUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,14 +92,15 @@ public class SignIn extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        toSignUpTextView.setTypeface(droidKufi);
+
+        dontHaveAccountTextView = (TextView) findViewById(R.id.dont_have_account_textview) ;
+        dontHaveAccountTextView.setTypeface(droidKufi);
 
         userEmail.setTypeface(droidKufi);
         userPassword.setTypeface(droidKufi);
         signInBtn.setTypeface(droidKufi);
         signInTextView.setTypeface(droidKufi);
-
-
-
 
 
 

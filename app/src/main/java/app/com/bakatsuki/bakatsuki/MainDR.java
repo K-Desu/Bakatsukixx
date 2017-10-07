@@ -135,9 +135,8 @@ public class MainDR extends AppCompatActivity {
 
     private void addChat(String roomkey,MessagePack messagePack) {
 
-        Log.i("--->",roomkey);
 
-        if (chatsHashMap.containsValue(roomkey)) {
+        if (chatsHashMap.containsKey(roomkey)) {
             MessagePack oldPack = chatsHashMap.get(roomkey);
             oldPack.setMessage(messagePack.getMessage());
             oldPack.setTimestamp(messagePack.getTimestamp());

@@ -1,15 +1,23 @@
 package app.com.bakatsuki.bakatsuki;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +32,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import static java.security.AccessController.getContext;
+
 public class SignUp extends AppCompatActivity {
 
 
@@ -32,11 +42,16 @@ public class SignUp extends AppCompatActivity {
     EditText userEmail , userPassword , userDrCode;
     Button signUpBtn ;
     TextView signUpTextView;
+    ProgressDialog loadingDialog ;
 
+
+    TextInputLayout emailInputLayout , passwordInputLayout , specialCodeInputLayout ;
+
+    ArrayList<String> xyz ;
 
     private App app;
 
-    private String soliderString = "جندي شجاع",cesString="مواطن صالح",DocString="طبيب مدحة";
+    private String soliderString = "جندي شجاع",cesString="مواطن صالح",DocString="اخصائي نفسي";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +65,16 @@ public class SignUp extends AppCompatActivity {
         final Typeface droidKufi = Typeface.createFromAsset(getResources().getAssets(), "droidKufi-regular.ttf");
 
         personType = (MaterialBetterSpinner) findViewById(R.id.person_type_spinner);
-        personTypeAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_dropdown_item_1line,new ArrayList<String>());
+        personTypeAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_dropdown_item,new ArrayList<String>());
+
         personTypeAdapter.add(soliderString);
         personTypeAdapter.add(cesString);
         personTypeAdapter.add(DocString);
         personType.setAdapter(personTypeAdapter);
 
+
+        personType.setTypeface(droidKufi);
+        personType.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_color));
 
         signUpTextView = (TextView) findViewById(R.id.sign_up_textview);
         userEmail = (EditText) findViewById(R.id.email_editext);
@@ -70,12 +89,57 @@ public class SignUp extends AppCompatActivity {
         signUpTextView.setTypeface(droidKufi);
 
 
+        emailInputLayout = (TextInputLayout) findViewById(R.id.email_inputlayout);
+        passwordInputLayout = (TextInputLayout) findViewById(R.id.password_inputlayout);
+        specialCodeInputLayout = (TextInputLayout) findViewById(R.id.dr_code_inputlayout);
+        emailInputLayout.setTypeface(droidKufi);
+        passwordInputLayout.setTypeface(droidKufi);
+        specialCodeInputLayout.setTypeface(droidKufi);
+
+
+
+
+        // Init progress dialog
+        loadingDialog = new ProgressDialog(this,R.style.AppCompatAlertDialogStyle);
+        loadingDialog.setTitle("تسجيل مستخدم");
+        loadingDialog.setMessage("التأكد من صحة البيانات ...");
+
+
+
+
+
+        personType.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (personType.getText().toString().equals("جندي شجاع") || personType.getText().toString().equals("اخصائي نفسي")){
+                    slideInFromLeft(userDrCode);
+                    userDrCode.setVisibility(View.VISIBLE);
+                }else{
+                    slideOutToRight(userDrCode);
+                    userDrCode.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
 
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                loadingDialog(true);
                 String email = userEmail.getText().toString().trim();
                 String password= userPassword.getText().toString().trim();
                 String type = personType.getText().toString().trim();
@@ -109,18 +173,35 @@ public class SignUp extends AppCompatActivity {
                             UserInformation userInformation = new UserInformation(uid,email,getAccountType(type));
                             app.getUsersRef().child(uid).setValue(userInformation);
 
-                            Toast.makeText(getApplicationContext(), "Succeed: sign up", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "تم التسجيل بنجاح", Toast.LENGTH_LONG).show();
+                            loadingDialog(false);
                             Intent intent = new Intent(getApplicationContext(),SignIn.class);
                             startActivity(intent);
 
                         } else {
                             // failed message
+                            loadingDialog(false);
                             Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
 
                         }
                     }
                 });
 
+    }
+
+
+
+    public void slideInFromLeft(View viewToAnimate) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.slide_in_left);
+        animation.setDuration(200);
+        viewToAnimate.startAnimation(animation);
+    }
+
+    public void slideOutToRight(View viewToAnimate) {
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.slide_out_right);
+        viewToAnimate.startAnimation(animation);
     }
 
 
@@ -132,4 +213,19 @@ public class SignUp extends AppCompatActivity {
             return UserInformation.ACCTYPE.DOC;
         return UserInformation.ACCTYPE.CES;
     }
+
+
+
+    protected void loadingDialog(boolean show)
+    {
+
+        if (show)
+            loadingDialog.show();
+        else
+            loadingDialog.dismiss();
+    }
+
+
+
+
 }

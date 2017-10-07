@@ -8,6 +8,7 @@ package app.com.bakatsuki.bakatsuki;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +79,7 @@ public class ChatAdapter extends BaseAdapter {
         }
 
         boolean myMsg = chatMessage.isMe() ;//Just a dummy check to simulate whether it me or other sender
-//        setAlignment(holder, myMsg,MessagePack.isHotKeys());
+        setAlignment(holder, myMsg,false);
         holder.txtMessage.setText(chatMessage.getMessage());
 
         return convertView;
@@ -120,6 +121,7 @@ public class ChatAdapter extends BaseAdapter {
         if (!isMe) {
             holder.contentWithBG.setBackgroundResource(R.drawable.out_message_bg);
 
+            Log.i("=======>","XYZXYZXYZXYZ");
             holder.txtMessage.setTextColor(context.getResources().getColor(R.color.text_color));
             holder.txtMessage.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 

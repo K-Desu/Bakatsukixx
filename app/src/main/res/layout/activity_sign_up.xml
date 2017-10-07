@@ -29,6 +29,7 @@
         android:layout_marginTop="30dp"
         android:paddingLeft="3dp"
         android:gravity="center"
+        android:foregroundGravity="center"
         android:textColorHint="#bdbdbd"
         android:layout_centerHorizontal="true"
         />
@@ -100,6 +101,7 @@
             android:ems="3"
             android:id="@+id/dr_code_edittext"
             android:inputType="text"
+            android:visibility="gone"
             android:textColorHint="#bdbdbd"
             android:scrollbarAlwaysDrawHorizontalTrack="true"
             android:scrollbarAlwaysDrawVerticalTrack="true"

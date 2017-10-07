@@ -1,5 +1,6 @@
 package app.com.bakatsuki.bakatsuki;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class SignIn extends AppCompatActivity {
     EditText userEmail , userPassword;
     TextInputLayout emailInputLayout , passwordInputLayout;
     Button signInBtn ;
+    ProgressDialog loadingDialog ;
     TextView signInTextView , toSignUpTextView , dontHaveAccountTextView ;
 
     private App app;
@@ -71,6 +73,15 @@ public class SignIn extends AppCompatActivity {
         // Init
 
         final Typeface droidKufi = Typeface.createFromAsset(getResources().getAssets(), "droidKufi-regular.ttf");
+
+
+
+
+        // Init progress dialog
+        loadingDialog = new ProgressDialog(this,R.style.AppCompatAlertDialogStyle);
+        loadingDialog.setTitle("تسجيل الدخول");
+        loadingDialog.setMessage("التأكد من صحة البيانات ...");
+
 
 
 
@@ -109,6 +120,7 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                loadingDialog(true);
                 String email = userEmail.getText().toString().trim();
                 String password= userPassword.getText().toString().trim();
                 signIn(email,password);
@@ -156,11 +168,12 @@ public class SignIn extends AppCompatActivity {
                              app.setUserInformation(userInformation);
 
                             if(userInformation.getAccountType() == UserInformation.ACCTYPE.CES) {
-
+                                loadingDialog(false);
                                 Intent intent = new Intent(getApplicationContext(),Individual.class);
                                 startActivity(intent);
                             } else if( userInformation.getAccountType() == UserInformation.ACCTYPE.Solider)
                             {
+                                loadingDialog(false);
                                 Intent intent = new Intent(getApplicationContext(),MainMenu.class);
                                 startActivity(intent);
                             } else if (userInformation.getAccountType() == UserInformation.ACCTYPE.DOC)
@@ -168,6 +181,7 @@ public class SignIn extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(),MainDR.class);
                                 startActivity(intent);
                             }
+
 
 
                         }
@@ -185,6 +199,17 @@ public class SignIn extends AppCompatActivity {
             }
         });
 
+    }
+
+
+
+    protected void loadingDialog(boolean show)
+    {
+
+        if (show)
+            loadingDialog.show();
+        else
+            loadingDialog.dismiss();
     }
 
 

@@ -3,6 +3,7 @@
 package app.com.bakatsuki.bakatsuki;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -37,6 +38,8 @@ public class Tab1 extends Fragment {
         View rootView = inflater.inflate(R.layout.tab1,container,false);
 
          startConverstion = (Button) rootView.findViewById(R.id.talk_to_dr_btn);
+        final Typeface droidKufi = Typeface.createFromAsset(getResources().getAssets(), "droidKufi-regular.ttf");
+        startConverstion.setTypeface(droidKufi);
 
         startConverstion.setOnClickListener(new View.OnClickListener() {
             @Override
